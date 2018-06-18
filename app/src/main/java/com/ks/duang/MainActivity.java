@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.text.Layout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.ks.duang.barrage.BarrageView;
 import com.ks.duang.crack.CustomView;
+import com.ks.duang.bomb.BombView;
 import com.ks.duang.lightning.LightningView;
 import com.ks.duang.rain.RainView;
 import com.ks.duang.snow.SnowView;
@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
     CustomView crachView;
     SnowView snowView;
     RelativeLayout layout;
+    BombView bombView;
 
     //模拟触屏点击屏幕事件
     private void doOnTouch(final View view) {
@@ -104,6 +105,14 @@ public class MainActivity extends Activity {
         }
     };
     final Handler handler = new Handler();
+    Handler bombHandler = new Handler();
+    private Runnable bombRunnable = new Runnable() {
+        @Override
+        public void run() {
+            bombView.startBomb();
+            bombHandler.postDelayed(this, 1000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +121,15 @@ public class MainActivity extends Activity {
         lightningView = new LightningView(this, null);
         crachView = new CustomView(this, null);
         snowView = new SnowView(this, null);
+        bombView = new BombView(this, null);
         layout = new RelativeLayout(this);    // 变量layout是该Activity的成员变量（private LinearLayout layout）
         layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));    // 设置layout布局方向为垂直
         setContentView(layout);
         layout.addView(lightningView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         lightningHandler.postDelayed(lightRunable, 3000);
-        rainHandler.postDelayed(rainRunable, 30000);
-        snowHandler.postDelayed(snowRunable, 60000);
+        rainHandler.postDelayed(rainRunable, 15000);
+        snowHandler.postDelayed(snowRunable, 30000);
+
         //读取文字资源
         final String[] texts = getResources().getStringArray(R.array.default_text_array);
 
@@ -140,7 +151,16 @@ public class MainActivity extends Activity {
                 handler.postDelayed(this, DELAY_TIME);
             }
         };
-        handler.postDelayed(createBarrageView, 3000);
+        handler.postDelayed(createBarrageView, 20000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                layout.addView(bombView, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                layout.removeView(snowView);
+                handler.removeCallbacksAndMessages(null);
+                bombHandler.post(bombRunnable);
+            }
+        }, 45000);
     }
 
     @Override
@@ -168,6 +188,12 @@ public class MainActivity extends Activity {
         }
         if (snowHandler != null) {
             snowHandler.removeCallbacksAndMessages(null);
+        }
+        if (bombHandler != null) {
+            bombHandler.removeCallbacksAndMessages(null);
+        }
+        if (bombView != null) {
+            bombView.release();
         }
         super.onDestroy();
     }

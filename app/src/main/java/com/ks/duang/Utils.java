@@ -55,4 +55,19 @@ public class Utils {
         }
         return bitmap;
     }
+
+    public static Bitmap readBitmap(Resources resources, int mDrawableResID, BitmapFactory.Options opts) {
+        Bitmap bitmap = null;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Drawable vectorDrawable = resources.getDrawable(mDrawableResID);
+            bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                    vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            vectorDrawable.draw(canvas);
+        } else {
+            bitmap = BitmapFactory.decodeResource(resources, mDrawableResID, opts);
+        }
+        return bitmap;
+    }
 }
