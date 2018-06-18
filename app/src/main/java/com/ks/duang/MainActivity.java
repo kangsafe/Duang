@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
                     downEvent.recycle();
                     upEvent.recycle();
                 }
-            }, 1000);
+            }, 2000);
         }
     }
 

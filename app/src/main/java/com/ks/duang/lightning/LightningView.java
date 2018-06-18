@@ -55,7 +55,7 @@ public class LightningView extends SurfaceView implements Runnable,
 		this.setLongClickable(true);
 		this.mSoundPool = new SoundPool(1, AudioManager.STREAM_SYSTEM, 5);
 		this.mSoundMap = new HashMap<Integer, Integer>();
-		this.mSoundMap.put(1, mSoundPool.load(context, R.raw.zapp, 1));
+		this.mSoundMap.put(1, mSoundPool.load(context, R.raw.lightning, 1));
 		this.mCustomPaint = new CustomPaint();
 	}
 
