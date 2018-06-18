@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">爱你万年</string>
+    <string name="app_name">请你吃粽子</string>
     <string name="app_name_lightning">XY:闪电</string>
     <string name="app_name_rain">XY:下雨</string>
     <string name="app_name_barrage">XY:弹幕</string>
@@ -10,6 +10,8 @@
     <string name="default_text">爱你一万年</string>
     <string-array name="default_text_array">
         <item>不效艾符趋习俗，但祈蒲酒话升平。</item>
+        <item>世间安得双全法，不负如来不负卿。</item>
+        <item>曾经沧海难为水，除却巫山不是云。</item>
         <item>屈子冤魂终古在，楚乡遗俗至今留。</item>
         <item>宫衣亦有名，端午被恩荣。</item>
         <item>粽包分两髻，艾束著危冠。</item>
