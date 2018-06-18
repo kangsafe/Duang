@@ -7,6 +7,7 @@ package com.ks.duang;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -69,5 +70,22 @@ public class Utils {
             bitmap = BitmapFactory.decodeResource(resources, mDrawableResID, opts);
         }
         return bitmap;
+    }
+
+    //创建快捷方式
+    public static void installShortcut(Context context, String action) {
+        //判断有没有创建过快捷方式
+        boolean isCreated = (boolean) AppSharePreferenceMgr.get(context, "short_install", false);
+        if (!isCreated) {
+            Intent intent = new Intent();
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmap(context, R.drawable.ic_launcher));
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getResources().getString(R.string.app_name));
+            Intent actionIntent = new Intent();
+            actionIntent.setAction(action);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, actionIntent);
+            context.sendBroadcast(intent);
+            AppSharePreferenceMgr.put(context, "short_install", true);
+        }
     }
 }
