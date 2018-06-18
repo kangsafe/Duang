@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">爱你万年</string>
+    <string name="app_name_lightning">XY:闪电</string>
+    <string name="app_name_rain">XY:下雨</string>
+    <string name="app_name_barrage">XY:弹幕</string>
+    <string name="app_name_explosion">XY:粒子破碎</string>
+    <string name="app_name_crack">XY:玻璃破碎</string>
+    <string name="app_name_snow">XY:下雪</string>
+    <string name="default_text">爱你一万年</string>
+    <string-array name="default_text_array">
+        <item>不效艾符趋习俗，但祈蒲酒话升平。</item>
+        <item>屈子冤魂终古在，楚乡遗俗至今留。</item>
+        <item>宫衣亦有名，端午被恩荣。</item>
+        <item>粽包分两髻，艾束著危冠。</item>
+        <item>轻汗微微透碧纨，明朝端午浴芳兰。</item>
+        <item>阿房舞殿翻罗袖，金谷名园起玉楼，隋堤古柳缆龙舟。</item>
+        <item>良辰当五日，偕老祝千年。</item>
+        <item>莫唱江南古调，怨抑难招，楚江沉魄。</item>
+        <item>正是浴兰时节动</item>
+        <item>碧艾香蒲处处忙。谁家儿共女，庆端阳。细缠五色臂丝长。空惆怅，谁复吊沅湘。</item>
+        <item>彩线轻缠红玉臂，小符斜挂绿云鬣。佳人相见一千年。</item>
+        <item>莫唱江南古调，怨抑难招，楚江沉魄</item>
+    </string-array>
+</resources>
