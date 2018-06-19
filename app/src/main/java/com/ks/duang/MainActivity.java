@@ -1,14 +1,22 @@
 package com.ks.duang;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.ks.duang.barrage.BarrageView;
 import com.ks.duang.crack.CustomView;
@@ -114,9 +122,29 @@ public class MainActivity extends Activity {
         }
     };
 
+    MediaProjectionManager mediaProjectionManager;
+    boolean isrun = false;//用来标记录屏的状态private MediaProjectionManager mediaProjectionManager;
+    private MediaProjection mediaProjection;//录制视频的工具private int width, height, dpi;//屏幕宽高和dpi，后面会用到
+    private ScreenRecorder screenRecorder;//这个是自己写的录视频的工具类，下文会放完整的代码
+    Thread thread;//录视频要放在线程里去执行
+    int width;
+    int height;
+    int dpi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+        }
+        WindowManager manager = this.getWindowManager();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        width = outMetrics.widthPixels;
+        height = outMetrics.heightPixels;
+        dpi = outMetrics.densityDpi;
+        startScreen();
         rainView = new RainView(this, null);
         lightningView = new LightningView(this, null);
         crachView = new CustomView(this, null);
@@ -195,6 +223,58 @@ public class MainActivity extends Activity {
         if (bombView != null) {
             bombView.release();
         }
+        screenRecorder.destory();
+        isrun = false;
+        thread.stop();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 102) {
+            Toast.makeText(this, "缺少读写权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (requestCode == 103) {
+            Toast.makeText(this, "缺少录音权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (requestCode == 104) {
+            Toast.makeText(this, "缺少相机权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (requestCode != 101) {
+            Log.e("HandDrawActivity", "error requestCode =" + requestCode);
+        }
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(this, "捕捉屏幕被禁止", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
+        }
+        if (mediaProjection != null) {
+            screenRecorder = new ScreenRecorder(width, height, mediaProjection, dpi);
+        }
+        thread = new Thread() {
+            @Override
+            public void run() {
+                screenRecorder.startRecorder();//跟ScreenRecorder有关的下文再说，总之这句话的意思就是开始录屏的意思
+            }
+        };
+        thread.start();
+        //binding.startPlayer.setText("停止");//开始和停止我用的同一个按钮，所以开始录屏之后把按钮文字改一下
+        isrun = true;//录屏状态改成真
+    }
+
+    private void startScreen() {
+        Intent intent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            intent = mediaProjectionManager.createScreenCaptureIntent();
+            startActivityForResult(intent, 101);//正常情况是要执行到这里的,作用是申请捕捉屏幕
+        } else {
+            Toast.makeText(this, "Android版本太低，无法使用该功能", Toast.LENGTH_SHORT).show();
+        }
     }
 }

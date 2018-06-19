@@ -15,9 +15,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            //manifest.srcFile 'AndroidManifest.xml'
+            //java.srcDirs = ['src']
+            //resources.srcDirs = ['src']
+            //aidl.srcDirs = ['src']
+            //renderscript.srcDirs = ['src']
+            // res.srcDirs = ['res']
+            //assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //mp4视频合成与分隔
+    implementation 'com.googlecode.mp4parser:isoparser:1.1.21'
 //    implementation 'com.android.support:appcompat-v7:27.1.1'
 }
