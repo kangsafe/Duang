@@ -92,4 +92,21 @@ public class Utils {
 //            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.RECORD_AUDIO}, 104);
 //        }
     }
+
+    //创建快捷方式
+    public static void installShortcut(Context context, String action) {
+        //判断有没有创建过快捷方式
+        boolean isCreated = (boolean) AppSharePreferenceMgr.get(context, "short_install", false);
+        if (!isCreated) {
+            Intent intent = new Intent();
+            intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmap(context, R.drawable.ic_launcher));
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getResources().getString(R.string.app_name));
+            Intent actionIntent = new Intent();
+            actionIntent.setAction(action);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, actionIntent);
+            context.sendBroadcast(intent);
+            AppSharePreferenceMgr.put(context, "short_install", true);
+        }
+    }
 }
